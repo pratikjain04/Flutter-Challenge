@@ -11,11 +11,14 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
+  bool isLoading;   //loader
   List<dynamic> _songs;
   MusicFinder audioPlayer;
   @override
   void initState() {
+
     super.initState();
+    isLoading = true; //loader
     initPlayer();
   }
 
@@ -24,6 +27,7 @@ class _MyAppState extends State<MyApp> {
     var songs = await MusicFinder.allSongs();   //this "songs" is iterable
     songs = new List.from(songs);           //converting songs into "list"
     setState(() {
+      isLoading = false;
       _songs=songs;
     });
 
@@ -34,6 +38,24 @@ class _MyAppState extends State<MyApp> {
 
   }
 
+
+  ListView SongList(){
+
+    return new ListView.builder(
+        itemCount: _songs.length,
+        itemBuilder: (context, int index){
+          return ListTile(
+            leading: new CircleAvatar(
+              child: new Text(_songs[index].title[0]),  //taking the first letter of the title
+            ),
+            title: new Text(_songs[index].title),
+            onTap: ()=>_playLocal(_songs[index].uri),
+          );
+
+        }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -42,21 +64,9 @@ class _MyAppState extends State<MyApp> {
         appBar: new AppBar(title: new Text('Music Player'),
         ),
 
-        body: new ListView.builder(
-            itemCount: _songs.length,
-            itemBuilder: (context, int index){
-              return ListTile(
-                leading: new CircleAvatar(
-                  child: new Text(_songs[index].title[0]),  //taking the first letter of the title
-                ),
-                title: new Text(_songs[index].title),
-                onTap: ()=>_playLocal(_songs[index].uri),
-              );
-
-            }
-
-
-        ),
+        body: isLoading ? new Center(   //checking if isLoading is true then we show a Progress Indicator
+          child: new CircularProgressIndicator(),
+        ) : SongList()
       );
 
     }
@@ -65,4 +75,8 @@ class _MyAppState extends State<MyApp> {
     );
     
   }
+
+
+
+
 }
