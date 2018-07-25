@@ -9,6 +9,9 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+
+
+
   List<GameButton> buttonList;
   var player1, player2, activePlayer;
 
@@ -59,15 +62,25 @@ void playGame(GameButton gb){
         //adding the id of the gameButton currently pressed by player2 to the list,so that we can evaluate later.
         }
       gb.enabled = false;   //because we want to disable the button which are played
-      checkWinner();
+     int winner = checkWinner();
+
+     //TIED GAME Check
+      if(winner == -1){
+        if(buttonList.every((p)=>p.text!="")){
+          showDialog(
+              context: context,
+            builder: (_) => new CustomDialog("Game Tied", "Press The Reset Button to Start Again", resetGame)
+          );
+        }
+      }
     });
 }
 
 
-  checkWinner(){
+  int checkWinner(){
     int winner = -1;
 
-    //Player1 ---WINNER CODE
+    //WINNER Check Code
 
     if(player1.contains(1) && player1.contains(2) && player1.contains(3)) //ROW 1
       winner=1;
@@ -133,11 +146,11 @@ void playGame(GameButton gb){
         }
 
     }
-
+  return winner;
   }
 
   void resetGame(){
-    if(Navigator.canPop(context)) Navigator.pop(context);
+    if(Navigator.canPop(context)) Navigator.pop(context);   //For closing the AlertDialog
       {
         setState(() {
           buttonList = doInit();    //Initializing the buttons again to the start by calling the doInit()
@@ -152,36 +165,49 @@ void playGame(GameButton gb){
         title: Center(child: new Text('Tic Tac Toe')),
         backgroundColor: Colors.black,
       ),
-      body: new GridView.builder(
-          padding: const EdgeInsets.all(10.0),
-          gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              childAspectRatio: 1.0,
-            crossAxisSpacing: 9.0,
-            mainAxisSpacing: 9.0,
-
-          ),
-          itemCount: buttonList.length,
-          itemBuilder: (context,index){
-            return new SizedBox(
-              width: 100.0,
-              height: 100.0,
-              child: new RaisedButton(
-                padding: const EdgeInsets.all(8.0),
-                onPressed: buttonList[index].enabled ? ()=> playGame(buttonList[index]):null,
-                child: new Text(
-                  buttonList[index].text,
-                  style: new TextStyle(color: Colors.white, fontSize: 20.0),
-                ),
-                color: buttonList[index].bg,
-                disabledColor: buttonList[index].bg,
-
+      body: new Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          Expanded(
+            child: new GridView.builder(
+              padding: const EdgeInsets.all(10.0),
+              gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                childAspectRatio: 1.0,
+                crossAxisSpacing: 9.0,
+                mainAxisSpacing: 9.0,
 
               ),
-            );
-          },
+              itemCount: buttonList.length,
+              itemBuilder: (context,index){
+                return new SizedBox(
+                  width: 100.0,
+                  height: 100.0,
+                  child: new RaisedButton(
+                    padding: const EdgeInsets.all(8.0),
+                    onPressed: buttonList[index].enabled ? ()=> playGame(buttonList[index]):null,
+                    child: new Text(
+                      buttonList[index].text,
+                      style: new TextStyle(color: Colors.white, fontSize: 20.0),
+                    ),
+                    color: buttonList[index].bg,
+                    disabledColor: buttonList[index].bg,
+                  ),
+                );
+              },
 
+            ),
+          ),
+          new RaisedButton(
+              child: Center(child: new Text("Reset", style: new TextStyle(color: Colors.black),)),
+              color: Colors.red,
+              onPressed: resetGame
+          )
+
+        ],
       ),
+
     );
   }
 }
