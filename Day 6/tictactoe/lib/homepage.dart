@@ -10,8 +10,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
 
 
-
-
   List<GameButton> buttonList;
   var player1, player2, activePlayer;
 
@@ -21,7 +19,7 @@ class _HomePageState extends State<HomePage> {
     buttonList = doInit();
   }
 
-  List<GameButton> doInit(){
+  List<GameButton> doInit() {
     //making a list of the moves player1 has choosed. This will help in judgement of the winner
     player1 = new List();
     player2 = new List();
@@ -42,11 +40,10 @@ class _HomePageState extends State<HomePage> {
     return gameButtons;
   }
 
-void playGame(GameButton gb){
-
+  void playGame(GameButton gb) {
     //setting the state because every time I press the button I want the changes on the screen to be saved instantaneously
     setState(() {
-      if(activePlayer==1) {
+      if (activePlayer == 1) {
         gb.text = 'X';
         gb.bg = Colors.red;
         activePlayer = 2;
@@ -54,108 +51,128 @@ void playGame(GameButton gb){
         //adding the id of the gameButton currently pressed by player1 to the list,so that we can evaluate later.
       }
       else {
-
         gb.text = "0";
         gb.bg = Colors.black;
         activePlayer = 1;
         player2.add(gb.id);
         //adding the id of the gameButton currently pressed by player2 to the list,so that we can evaluate later.
-        }
-      gb.enabled = false;   //because we want to disable the button which are played
-     int winner = checkWinner();
+      }
+      gb.enabled =
+      false; //because we want to disable the button which are played
+      int winner = checkWinner();
 
-     //TIED GAME Check
-      if(winner == -1){
-        if(buttonList.every((p)=>p.text!="")){
+      //TIED GAME Check
+      if (winner == -1) {
+        if (buttonList.every((p) => p.text != "")) {
           showDialog(
               context: context,
-            builder: (_) => new CustomDialog("Game Tied", "Press The Reset Button to Start Again", resetGame)
+              builder: (_) =>
+              new CustomDialog(
+                  "Game Tied", "Press The Reset Button to Start Again",
+                  resetGame)
           );
         }
       }
     });
-}
+  }
 
 
-  int checkWinner(){
+  int checkWinner() {
     int winner = -1;
 
     //WINNER Check Code
 
-    if(player1.contains(1) && player1.contains(2) && player1.contains(3)) //ROW 1
-      winner=1;
-    if(player2.contains(1) && player2.contains(2) && player2.contains(3)) //ROW 1
-      winner=2;
+    if (player1.contains(1) && player1.contains(2) &&
+        player1.contains(3)) //ROW 1
+      winner = 1;
+    if (player2.contains(1) && player2.contains(2) &&
+        player2.contains(3)) //ROW 1
+      winner = 2;
 
 
-    if (player1.contains(4) && player1.contains(5) && player1.contains(6))   //ROW 2
-      winner=1;
-    if (player2.contains(4) && player2.contains(5) && player2.contains(6))   //ROW 2
-      winner=2;
+    if (player1.contains(4) && player1.contains(5) &&
+        player1.contains(6)) //ROW 2
+      winner = 1;
+    if (player2.contains(4) && player2.contains(5) &&
+        player2.contains(6)) //ROW 2
+      winner = 2;
 
 
-    if (player1.contains(7) && player1.contains(8) && player1.contains(9))   //ROW 3
-      winner=1;
-    if (player2.contains(7) && player2.contains(8) && player2.contains(9))   //ROW 3
-      winner=2;
+    if (player1.contains(7) && player1.contains(8) &&
+        player1.contains(9)) //ROW 3
+      winner = 1;
+    if (player2.contains(7) && player2.contains(8) &&
+        player2.contains(9)) //ROW 3
+      winner = 2;
 
-    if (player1.contains(1) && player1.contains(4) && player1.contains(7))   //COLUMN 1
-      winner=1;
-    if (player2.contains(1) && player2.contains(4) && player2.contains(7))   //COLUMN 1
-      winner=2;
-
-
-    if (player1.contains(2) && player1.contains(5) && player1.contains(8))   //COLUMN 2
-      winner=1;
-    if (player2.contains(2) && player2.contains(5) && player2.contains(8))   //COLUMN 2
-      winner=2;
+    if (player1.contains(1) && player1.contains(4) &&
+        player1.contains(7)) //COLUMN 1
+      winner = 1;
+    if (player2.contains(1) && player2.contains(4) &&
+        player2.contains(7)) //COLUMN 1
+      winner = 2;
 
 
-    if (player1.contains(3) && player1.contains(6) && player1.contains(9))   //COLUMN 3
-      winner=1;
-    if (player2.contains(3) && player2.contains(6) && player2.contains(9))   //COLUMN 3
-      winner=2;
+    if (player1.contains(2) && player1.contains(5) &&
+        player1.contains(8)) //COLUMN 2
+      winner = 1;
+    if (player2.contains(2) && player2.contains(5) &&
+        player2.contains(8)) //COLUMN 2
+      winner = 2;
 
 
-    if (player1.contains(1) && player1.contains(5) && player1.contains(9))   //DIAGONAL 1
-      winner=1;
-    if (player2.contains(1) && player2.contains(5) && player2.contains(9))   //DIAGONAL 1
-      winner=2;
+    if (player1.contains(3) && player1.contains(6) &&
+        player1.contains(9)) //COLUMN 3
+      winner = 1;
+    if (player2.contains(3) && player2.contains(6) &&
+        player2.contains(9)) //COLUMN 3
+      winner = 2;
 
 
-    if (player1.contains(3) && player1.contains(5) && player1.contains(7))   //DIAGONAL 2
-      winner=1;
-    if (player2.contains(3) && player2.contains(5) && player2.contains(7))   //DIAGONAL 2
-      winner=2;
+    if (player1.contains(1) && player1.contains(5) &&
+        player1.contains(9)) //DIAGONAL 1
+      winner = 1;
+    if (player2.contains(1) && player2.contains(5) &&
+        player2.contains(9)) //DIAGONAL 1
+      winner = 2;
 
+
+    if (player1.contains(3) && player1.contains(5) &&
+        player1.contains(7)) //DIAGONAL 2
+      winner = 1;
+    if (player2.contains(3) && player2.contains(5) &&
+        player2.contains(7)) //DIAGONAL 2
+      winner = 2;
 
 
     //check for winner
 
-    if(winner!=-1)
-      {
-        if(winner == 1){
+    if (winner != -1) {
+      if (winner == 1) {
         showDialog(
-             context: context,
-            builder: (_) => new CustomDialog("Player 1 Won!!", "Reset the Game", resetGame));
-        }
-        else {
-          showDialog(
-              context: context,
-              builder: (_) => new CustomDialog("Player 2 Won!!", "Reset the Game", resetGame));
-        }
-
+            context: context,
+            builder: (_) =>
+            new CustomDialog("Player 1 Won!!", "Reset the Game", resetGame));
+      }
+      else {
+        showDialog(
+            context: context,
+            builder: (_) =>
+            new CustomDialog("Player 2 Won!!", "Reset the Game", resetGame));
+      }
     }
-  return winner;
+    return winner;
   }
 
-  void resetGame(){
-    if(Navigator.canPop(context)) Navigator.pop(context);   //For closing the AlertDialog
-      {
-        setState(() {
-          buttonList = doInit();    //Initializing the buttons again to the start by calling the doInit()
-        });
-      }
+  void resetGame() {
+    if (Navigator.canPop(context)) Navigator.pop(
+        context); //For closing the AlertDialog
+        {
+      setState(() {
+        buttonList =
+            doInit(); //Initializing the buttons again to the start by calling the doInit()
+      });
+    }
   }
 
   @override
@@ -165,47 +182,65 @@ void playGame(GameButton gb){
         title: Center(child: new Text('Tic Tac Toe')),
         backgroundColor: Colors.black,
       ),
-      body: new Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+      body: new Stack(
+        fit: StackFit
+            .expand,
         children: <Widget>[
-          Expanded(
-            child: new GridView.builder(
-              padding: const EdgeInsets.all(10.0),
-              gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                childAspectRatio: 1.0,
-                crossAxisSpacing: 9.0,
-                mainAxisSpacing: 9.0,
 
-              ),
-              itemCount: buttonList.length,
-              itemBuilder: (context,index){
-                return new SizedBox(
-                  width: 100.0,
-                  height: 100.0,
-                  child: new RaisedButton(
-                    padding: const EdgeInsets.all(8.0),
-                    onPressed: buttonList[index].enabled ? ()=> playGame(buttonList[index]):null,
-                    child: new Text(
-                      buttonList[index].text,
-                      style: new TextStyle(color: Colors.white, fontSize: 20.0),
-                    ),
-                    color: buttonList[index].bg,
-                    disabledColor: buttonList[index].bg,
-                  ),
-                );
-              },
-
-            ),
+          new Image(
+            image: new AssetImage('images/finalttt.jpg'),
+            fit: BoxFit.cover, //covers the entire screen top to bottom
+            color: Colors.black54,
+            colorBlendMode: BlendMode.darken,
           ),
-          new RaisedButton(
-              child: Center(child: new Text("Reset", style: new TextStyle(color: Colors.black),)),
-              color: Colors.red,
-              onPressed: resetGame
-          )
 
+          new Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              Expanded(
+                child: new GridView.builder(
+                  padding: const EdgeInsets.all(10.0),
+                  gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    childAspectRatio: 1.0,
+                    crossAxisSpacing: 9.0,
+                    mainAxisSpacing: 9.0,
+
+                  ),
+                  itemCount: buttonList.length,
+                  itemBuilder: (context, index) {
+                    return new SizedBox(
+                      width: 100.0,
+                      height: 100.0,
+                      child: new RaisedButton(
+                        padding: const EdgeInsets.all(8.0),
+                        onPressed: buttonList[index].enabled ? () =>
+                            playGame(buttonList[index]) : null,
+                        child: new Text(
+                          buttonList[index].text,
+                          style: new TextStyle(
+                              color: Colors.white, fontSize: 20.0),
+                        ),
+                        color: buttonList[index].bg,
+                        disabledColor: buttonList[index].bg,
+                      ),
+                    );
+                  },
+
+                ),
+              ),
+              new RaisedButton(
+                  child: Center(child: new Text(
+                    "Reset", style: new TextStyle(color: Colors.black),)),
+                  color: Colors.red,
+                  onPressed: resetGame
+              )
+
+            ],
+          ),
         ],
+
       ),
 
     );
